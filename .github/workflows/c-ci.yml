@@ -1,0 +1,30 @@
+name: Update Installer Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Update minor version and commit message
+        run: |
+          major=$(grep -oP 'INSTALLER_MAJOR="\K\d+' install.sh)
+          minor=$(grep -oP 'INSTALLER_MINOR="\K\d+' install.sh)
+          minor=$((minor + 1))
+          sed -ri "s/(INSTALLER_MINOR=\")([0-9]+)/\1$minor/" install.sh
+          git config --local user.email "vincenth@synaptics.com"
+          git config --local user.name "Vincent Huang"
+          git add install.sh
+          git commit -m "Update installer version to $major.$minor"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.INSTALL2_TOKEN }}

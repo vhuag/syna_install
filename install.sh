@@ -24,7 +24,7 @@ elif [ "$ARCH" = "aarch64" ]; then
 elif [ "$ARCH" = "i686" ]; then
     ARCH="i386"
 elif [ "$ARCH" = "armv7l" ]; then
-    ARCH="arm64"
+    ARCH="armhf"
 else
     echo "Unsupported architecture: $ARCH"
     exit 1

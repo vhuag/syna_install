@@ -73,5 +73,19 @@ rm "$DEB_FILE"
 # If there are any missing dependencies, try to install them
 sudo apt-get install -f
 
+# Check if SSH is installed and running
+SSH_STATUS=$(systemctl is-active ssh)
+
+if [ "$SSH_STATUS" = "inactive" ]; then
+    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "armv7l" ]; then
+        sudo apt-get update
+    fi
+    sudo apt install openssh-server
+    sudo systemctl enable ssh
+    sudo systemctl start ssh
+else
+    echo "SSH is already installed and active."
+fi
+
 # Echo a success message
 echo "Installation complete."

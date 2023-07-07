@@ -34,6 +34,7 @@ OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
     if [ -f "/etc/chrome_dev.conf" ]; then
         echo "Chrome OS system."
+        $OS="ChromeOS"
     else
         echo "Linux system."
     fi
@@ -49,43 +50,64 @@ else
 fi
 
 
-# Set the URL of your .deb file
-DEB_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4utils_${VERSION}_${ARCH}.deb"
 
-# Download the .deb file
-curl -f -L -O "$DEB_URL"
 
-# Check if curl was successful
-if [ $? -ne 0 ]; then
-    echo "Failed to download file, the version may be invalid."
-    exit 1
-fi
-
-# Extract the filename from the URL
-DEB_FILE=$(basename "$DEB_URL")
-
-# Install the .deb file
-sudo dpkg -i "$DEB_FILE"
-
-# Remove the .deb file
-rm "$DEB_FILE"
-
-# If there are any missing dependencies, try to install them
-sudo apt-get install -f
-
-# Check if SSH is installed and running
-SSH_STATUS=$(systemctl is-active ssh)
-
-if [ "$SSH_STATUS" = "inactive" ]; then
-    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "armv7l" ]; then
-        sudo apt-get update
+if [ "$OS" = "ChromeOS" ]; then
+    echo "Install for chromeOS"
+    if [ "$ARCH" = "x86_64" ]; then
+        BINARCH="x86-64"
+    elif [ "$ARCH" = "aarch64" ]; then
+        BINARCH="arm"
+    elif [ "$ARCH" = "i686" ]; then
+        BINARCH="i386"
+    elif [ "$ARCH" = "armv7l" ]; then
+        BINARCH="arm"
+    BIN_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4update_${BINARCH}"
+    # Download the .deb file
+    curl -f -L -O "$BIN_URL"
+    # Check if curl was successful
+    if [ $? -ne 0 ]; then
+        echo "Failed to download file, the version may be invalid."
+        exit 1
     fi
-    sudo apt install openssh-server
-    sudo systemctl enable ssh
-    sudo systemctl start ssh
-else
-    echo "SSH is already installed and active."
-fi
 
+elif
+    # Set the URL of your .deb file
+    DEB_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4utils_${VERSION}_${ARCH}.deb"
+
+    # Download the .deb file
+    curl -f -L -O "$DEB_URL"
+
+    # Check if curl was successful
+    if [ $? -ne 0 ]; then
+        echo "Failed to download file, the version may be invalid."
+        exit 1
+    fi
+    # Extract the filename from the URL
+    DEB_FILE=$(basename "$DEB_URL")
+
+    # Install the .deb file
+    sudo dpkg -i "$DEB_FILE"
+
+    # Remove the .deb file
+    rm "$DEB_FILE"
+
+    # If there are any missing dependencies, try to install them
+    sudo apt-get install -f
+
+    # Check if SSH is installed and running
+    SSH_STATUS=$(systemctl is-active ssh)
+
+    if [ "$SSH_STATUS" = "inactive" ]; then
+        if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "armv7l" ]; then
+            sudo apt-get update
+        fi
+        sudo apt install openssh-server
+        sudo systemctl enable ssh
+        sudo systemctl start ssh
+    else
+        echo "SSH is already installed and active."
+    fi
+fi
 # Echo a success message
 echo "Installation complete."

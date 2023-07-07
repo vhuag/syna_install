@@ -8,10 +8,7 @@ if [ -z "$1" ]; then
     echo "No version specified, will get latest one."
 fi
 
-API_URL="https://api.github.com/repos/vhuag/rmi4utils/releases"
-VERSION=${1:-$(curl -s $API_URL/latest | grep -Po '"tag_name": "\K.*?(?=")')}
-VERSION=${VERSION#v}
-echo "Installing rmi4utils v${VERSION}..."
+
 # Determine the architecture of the system
 ARCH=$(uname -m)
 echo "Architecture: $ARCH"
@@ -49,10 +46,18 @@ else
     exit 1
 fi
 
+API_URL="https://api.github.com/repos/vhuag/rmi4utils/releases"
 
 
 
 if [ "$OS" = "ChromeOS" ]; then
+    #VERSION=${1:-$(curl -s $API_URL/latest | grep -Po '"tag_name": "\K.*?(?=")')}
+    if [ -z "$1" ]; then
+        echo "Need to input version on chromeOS."
+        exit 1
+    fi
+    VERSION=${VERSION#v}
+    echo "Installing rmi4update v${VERSION}..."
     echo "Install for chromeOS"
     if [ "$ARCH" = "x86_64" ]; then
         BINARCH="x86-64"
@@ -75,6 +80,9 @@ if [ "$OS" = "ChromeOS" ]; then
     cp rmi4update_${BINARCH} /usr/local/bin/rmi4update
 
 else
+    VERSION=${1:-$(curl -s $API_URL/latest | grep -Po '"tag_name": "\K.*?(?=")')}
+    VERSION=${VERSION#v}
+    echo "Installing rmi4utils v${VERSION}..."
     # Set the URL of your .deb file
     DEB_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4utils_${VERSION}_${ARCH}.deb"
 

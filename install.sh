@@ -62,6 +62,7 @@ if [ "$OS" = "ChromeOS" ]; then
         BINARCH="i386"
     elif [ "$ARCH" = "armv7l" ]; then
         BINARCH="arm"
+    fi
     BIN_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4update_${BINARCH}"
     # Download the .deb file
     curl -f -L -O "$BIN_URL"

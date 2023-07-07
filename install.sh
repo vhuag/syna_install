@@ -12,16 +12,20 @@ fi
 # Determine the architecture of the system
 ARCH=$(uname -m)
 echo "Architecture: $ARCH"
-
+BINARCH=""
 # Adjust the architecture string to match the one used in your .deb file names
 if [ "$ARCH" = "x86_64" ]; then
     ARCH="amd64"
+    BINARCH="x86-64"
 elif [ "$ARCH" = "aarch64" ]; then
     ARCH="arm64"
+    BINARCH="arm"
 elif [ "$ARCH" = "i686" ]; then
     ARCH="i386"
+    BINARCH="i386"
 elif [ "$ARCH" = "armv7l" ]; then
     ARCH="armhf"
+    BINARCH="arm"
 else
     echo "Unsupported architecture: $ARCH"
     exit 1
@@ -56,18 +60,9 @@ if [ "$OS" = "ChromeOS" ]; then
         echo "Need to input version on chromeOS."
         exit 1
     fi
-    VERSION=${VERSION#v}
+    VERSION=$1
     echo "Installing rmi4update v${VERSION}..."
     echo "Install for chromeOS"
-    if [ "$ARCH" = "x86_64" ]; then
-        BINARCH="x86-64"
-    elif [ "$ARCH" = "aarch64" ]; then
-        BINARCH="arm"
-    elif [ "$ARCH" = "i686" ]; then
-        BINARCH="i386"
-    elif [ "$ARCH" = "armv7l" ]; then
-        BINARCH="arm"
-    fi
     BIN_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4update_${BINARCH}"
     echo "Download from $BIN_URL"
     # Download the .deb file

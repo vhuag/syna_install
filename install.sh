@@ -73,7 +73,7 @@ if [ "$OS" = "ChromeOS" ]; then
     fi
     cp rmi4update_${BINARCH} /usr/local/bin/rmi4update
 
-elif
+else
     # Set the URL of your .deb file
     DEB_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4utils_${VERSION}_${ARCH}.deb"
 

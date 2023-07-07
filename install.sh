@@ -71,6 +71,7 @@ if [ "$OS" = "ChromeOS" ]; then
         echo "Failed to download file, the version may be invalid."
         exit 1
     fi
+    cp rmi4update_${BINARCH} /usr/local/bin/rmi4update
 
 elif
     # Set the URL of your .deb file

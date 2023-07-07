@@ -73,6 +73,7 @@ if [ "$OS" = "ChromeOS" ]; then
         exit 1
     fi
     cp rmi4update_${BINARCH} /usr/local/bin/rmi4update
+    sudo chmod +x /usr/local/bin/rmi4update
 
 else
     VERSION=${1:-$(curl -s $API_URL/latest | grep -Po '"tag_name": "\K.*?(?=")')}

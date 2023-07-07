@@ -34,7 +34,7 @@ OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
     if [ -f "/etc/chrome_dev.conf" ]; then
         echo "Chrome OS system."
-        $OS="ChromeOS"
+        OS="ChromeOS"
     else
         echo "Linux system."
     fi

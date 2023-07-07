@@ -64,6 +64,7 @@ if [ "$OS" = "ChromeOS" ]; then
         BINARCH="arm"
     fi
     BIN_URL="https://github.com/vhuag/rmi4utils/releases/download/v${VERSION}/rmi4update_${BINARCH}"
+    echo "Download from $BIN_URL"
     # Download the .deb file
     curl -f -L -O "$BIN_URL"
     # Check if curl was successful

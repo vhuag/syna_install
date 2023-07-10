@@ -25,7 +25,7 @@ fi
 # Use ROOT_DIR in the script
 echo "Using ROOT_DIR: $ROOT_DIR"
 
-TOKEN="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"
+TOKEN="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"
 OWNER="vhuag"
 REPO="spm"
 PATH_TO_FILE="package/rmi4update_test/rmi4update_test.py"

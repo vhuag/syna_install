@@ -27,6 +27,15 @@ echo "Using ROOT_DIR: $ROOT_DIR"
 
 #TOKEN="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"
 TOKEN_URL="http://pc.synaptics.com:8888/resources/driver1/spm/spm_token.txt"
+
+TOKEN=$(curl -s -w "%{http_code}" -o /dev/null $TOKEN_URL)
+
+if [ "$TOKEN" != "200" ]; then
+    echo "Cannot retrieve token, check access rights to token URL"
+    exit 1
+fi
+
+
 TOKEN=$(curl -s $TOKEN_URL)
 
 OWNER="vhuag"

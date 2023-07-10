@@ -149,7 +149,7 @@ fi
 sudo chmod +x $SPM_FILE_NAME
 
 PATH_TO_FILE="spm.json"
-JSON_FILE_NAME=$(basename $PATH_TO_FILE)
+JSON_FILE_NAME="spm.json_"
 
 curl -f -H "Authorization: token $TOKEN" \
      -H 'Accept: application/vnd.github.v3.raw' \

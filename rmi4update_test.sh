@@ -25,7 +25,10 @@ fi
 # Use ROOT_DIR in the script
 echo "Using ROOT_DIR: $ROOT_DIR"
 
-TOKEN="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"
+#TOKEN="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"
+TOKEN_URL="http://pc.synaptics.com:8888/resources/driver1/spm/spm_token.txt"
+TOKEN=$(curl -s $TOKEN_URL)
+
 OWNER="vhuag"
 REPO="spm"
 PATH_TO_FILE="package/rmi4update_test/rmi4update_test.py"

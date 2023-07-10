@@ -1,7 +1,7 @@
 #/bin/bash
 
 echo "Install for rmi4update_test"
-
+echo $1
 # Parse command-line arguments
 for arg in "$@"
 do

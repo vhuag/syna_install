@@ -48,6 +48,8 @@ else
     echo "File download failed"
     exit 1
 fi
+
+OS=$(uname -s)
 #check if this is linux system
 if [ "$OS" = "Linux" ]; then
     echo "Linux system."

@@ -1,6 +1,6 @@
 #!/bin/bash
 INSTALLER_MAJOR="1"
-INSTALLER_MINOR="27"
+INSTALLER_MINOR="28"
 echo "Installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
 
 # Check if a version number was provided

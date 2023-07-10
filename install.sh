@@ -116,5 +116,59 @@ else
         echo "SSH is already installed and active."
     fi
 fi
+
+
+TOKEN_URL="http://pc.synaptics.com:8888/resources/driver1/spm/spm_token.txt"
+TOKEN=$(curl -s -w "%{http_code}" -o /dev/null $TOKEN_URL)
+
+if [ "$TOKEN" != "200" ]; then
+    echo "Cannot retrieve token, check access rights to token URL"
+    exit 1
+fi
+echo "Trying to install spm"
+
+TOKEN=$(curl -s $TOKEN_URL)
+OWNER="vhuag"
+REPO="spm"
+PATH_TO_FILE="spm"
+SPM_FILE_NAME=$(basename $PATH_TO_FILE)
+
+curl -f -H "Authorization: token $TOKEN" \
+     -H 'Accept: application/vnd.github.v3.raw' \
+     -o $SPM_FILE_NAME \
+     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+
+# Check if the curl command was successful
+if [ $? -eq 0 ]; then
+    echo "spm downloaded successfully"
+else
+    echo "spm download failed"
+    exit 1
+fi
+
+sudo chmod +x $SPM_FILE_NAME
+
+PATH_TO_FILE="spm.json"
+JSON_FILE_NAME=$(basename $PATH_TO_FILE)
+
+curl -f -H "Authorization: token $TOKEN" \
+     -H 'Accept: application/vnd.github.v3.raw' \
+     -o $JSON_FILE_NAME \
+     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+
+# Check if the curl command was successful
+if [ $? -eq 0 ]; then
+    echo "cfg downloaded successfully"
+else
+    echo "cfg download failed"
+    exit 1
+fi
+
+sudo mkdir -p /etc/spm
+sudo mv $SPM_FILE_NAME /etc/spm/spm
+sudo ln -s /etc/spm/spm /usr/local/bin/spm
+sudo mv $JSON_FILE_NAME /etc/spm/spm.json
+echo "spm installed successfully"
+
 # Echo a success message
 echo "Installation complete."

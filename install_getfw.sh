@@ -65,9 +65,10 @@ else
     echo "System $OS is not supported."
     exit 1
 fi
-# copy the file to the destination
+
 sudo mkdir -p $ROOT_DIR/package/getfw
 sudo cp $FILE_NAME $ROOT_DIR/$PATH_TO_FILE
 sudo rm $FILE_NAME
 
+echo "File copied to $ROOT_DIR/$PATH_TO_FILE"
 echo "finished"

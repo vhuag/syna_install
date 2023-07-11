@@ -39,7 +39,7 @@ TOKEN=$(curl -s $TOKEN_URL)
 
 OWNER="vhuag"
 REPO="spm"
-PATH_TO_FILE="package/getfw/get_firmware.sh"
+PATH_TO_FILE="package/getfw/get_fw.sh"
 FILE_NAME=$(basename $PATH_TO_FILE)
 
 curl -f -H "Authorization: token $TOKEN" \

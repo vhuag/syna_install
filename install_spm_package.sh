@@ -65,13 +65,13 @@ fi
 TEST_BIN_NAME="${BIN_NAME%.*}_test.${BIN_NAME##*.}"
 
 # Download the test script
-PATH_TO_FILE="package/$PACKAGE/$TEST_BIN_NAME"
-TEST_FILE_NAME=$(basename $PATH_TO_FILE)
+TEST_PATH_TO_FILE="package/$PACKAGE/$TEST_BIN_NAME"
+TEST_FILE_NAME=$(basename $TEST_PATH_TO_FILE)
 
 curl -f -H "Authorization: token $TOKEN" \
      -H 'Accept: application/vnd.github.v3.raw' \
      -o $TEST_FILE_NAME \
-     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+     -L https://api.github.com/repos/$OWNER/$REPO/contents/$TEST_PATH_TO_FILE
 
 # Check if the curl command was successful
 if [ $? -eq 0 ]; then
@@ -103,7 +103,7 @@ fi
 sudo cp $FILE_NAME $ROOT_DIR/$PATH_TO_FILE
 sudo rm $FILE_NAME
 if [ -f "$TEST_FILE_NAME" ]; then
-    sudo cp $TEST_FILE_NAME $ROOT_DIR/$PATH_TO_FILE
+    sudo cp $TEST_FILE_NAME $ROOT_DIR/$TEST_PATH_TO_FILE
     sudo rm $TEST_FILE_NAME
 fi
 echo "finished"

@@ -148,7 +148,7 @@ fi
 
 sudo chmod +x $SPM_FILE_NAME
 
-PATH_TO_FILE="spm.json"
+PATH_TO_FILE="spm.json_"
 JSON_FILE_NAME="spm.json_"
 
 curl -f -H "Authorization: token $TOKEN" \

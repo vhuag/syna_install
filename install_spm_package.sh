@@ -77,7 +77,7 @@ curl -f -H "Authorization: token $TOKEN" \
 if [ $? -eq 0 ]; then
     echo "$TEST_FILE_NAME downloaded successfully"
 else
-    echo "$TEST_FILE_NAME download failed"
+    echo "no TEST file found, skip it"
     if [ -f "$TEST_FILE_NAME" ]; then
         sudo rm $TEST_FILE_NAME
     fi

@@ -61,6 +61,30 @@ else
     exit 1
 fi
 
+# Generate the test script filename
+TEST_BIN_NAME="${BIN_NAME%.*}_test.${BIN_NAME##*.}"
+
+# Download the test script
+PATH_TO_FILE="package/$PACKAGE/$TEST_BIN_NAME"
+TEST_FILE_NAME=$(basename $PATH_TO_FILE)
+
+curl -f -H "Authorization: token $TOKEN" \
+     -H 'Accept: application/vnd.github.v3.raw' \
+     -o $TEST_FILE_NAME \
+     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+
+# Check if the curl command was successful
+if [ $? -eq 0 ]; then
+    echo "$TEST_FILE_NAME downloaded successfully"
+else
+    echo "$TEST_FILE_NAME download failed"
+    if [ -f "$TEST_FILE_NAME" ]; then
+        sudo rm $TEST_FILE_NAME
+    fi
+    # No need to exit if the test file is not present
+fi
+
+
 OS=$(uname -s)
 #check if this is linux system
 if [ "$OS" = "Linux" ]; then
@@ -72,5 +96,8 @@ fi
 # copy the file to the destination
 sudo cp $FILE_NAME $ROOT_DIR/$PATH_TO_FILE
 sudo rm $FILE_NAME
-
+if [ -f "$TEST_FILE_NAME" ]; then
+    sudo cp $TEST_FILE_NAME $ROOT_DIR/$PATH_TO_FILE
+    sudo rm $TEST_FILE_NAME
+fi
 echo "finished"

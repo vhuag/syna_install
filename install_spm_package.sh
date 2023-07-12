@@ -62,7 +62,7 @@ else
 fi
 
 # Generate the test script filename
-TEST_BIN_NAME="${BIN_NAME%.*}_test.${BIN_NAME##*.}"
+TEST_BIN_NAME="test_$BIN_NAME"
 
 # Download the test script
 TEST_PATH_TO_FILE="package/$PACKAGE/$TEST_BIN_NAME"

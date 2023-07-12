@@ -168,6 +168,7 @@ sudo mkdir -p /etc/spm
 sudo mv $SPM_FILE_NAME /etc/spm/spm
 sudo ln -s /etc/spm/spm /usr/local/bin/spm
 sudo mv $JSON_FILE_NAME /etc/spm/spm.json
+sudo mkdir -p /etc/spm/package
 echo "spm installed successfully"
 
 # Echo a success message

@@ -93,6 +93,12 @@ else
     echo "System $OS is not supported."
     exit 1
 fi
+
+# Check if the destination directory exists
+if [ ! -d "$ROOT_DIR/package/$PACKAGE" ]; then
+    sudo mkdir -p $ROOT_DIR/package/$PACKAGE
+fi
+
 # copy the file to the destination
 sudo cp $FILE_NAME $ROOT_DIR/$PATH_TO_FILE
 sudo rm $FILE_NAME

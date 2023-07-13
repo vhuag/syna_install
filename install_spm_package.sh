@@ -53,7 +53,10 @@ files_json=$(curl -H "Authorization: token $TOKEN" \
   https://api.github.com/repos/$OWNER/$REPO/contents/$DIR_PATH)
 
 # Parse the JSON response to get an array of all the file paths
-file_paths=($(echo $files_json | jq -r '.[] | .path'))
+file_paths=$(python3 -c "import json; print([item['path'] for item in json.loads('''$files_json''')])")
+
+# Convert python list (string format) to bash array
+file_paths=($(echo $file_paths | tr -d '[],'))
 
 # Iterate over the array and download each file
 for file_path in "${file_paths[@]}"
@@ -79,6 +82,7 @@ do
     exit 1
   fi
 done
+
 
 echo completed
 exit 1

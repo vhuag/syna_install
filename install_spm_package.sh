@@ -52,6 +52,8 @@ FILE_NAME=$(basename $PATH_TO_FILE)
 files_json=$(curl -H "Authorization: token $TOKEN" \
   https://api.github.com/repos/$OWNER/$REPO/contents/$DIR_PATH)
 
+print(files_json)
+
 # Parse the JSON response to get an array of all the file paths
 file_paths=$(python3 -c "import json; print([item['path'] for item in json.loads('''$files_json''')])")
 

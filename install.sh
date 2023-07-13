@@ -171,5 +171,20 @@ sudo mv $JSON_FILE_NAME /etc/spm/spm.json
 sudo mkdir -p /etc/spm/package
 echo "spm installed successfully"
 
+#install python3
+sudo apt-get install python3
+
+#install python3-pip
+sudo apt-get install python3-pip
+
+#install pytest
+sudo pip3 install pytest
+
+#install pytest-html
+sudo pip3 install pytest-html
+
+#install requests
+sudo pip3 install requests
+
 # Echo a success message
 echo "Installation complete."

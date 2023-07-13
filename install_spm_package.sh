@@ -47,22 +47,15 @@ DIR_PATH="package/$PACKAGE"
 PATH_TO_FILE="$DIR_PATH/$BIN_NAME"
 FILE_NAME=$(basename $PATH_TO_FILE)
 
-
 # Get list of all files in the directory
 files_json=$(curl -H "Authorization: token $TOKEN" \
   https://api.github.com/repos/$OWNER/$REPO/contents/$DIR_PATH)
 
-print(files_json)
-
 # Parse the JSON response to get an array of all the file paths
-file_paths=$(python3 -c "import json; print([item['path'] for item in json.loads('''$files_json''')])")
-
-print(file_paths)
+file_paths=$(echo "$files_json" | python3 -c "import sys, json; print([item['path'] for item in json.loads(sys.stdin.read())])")
 
 # Convert python list (string format) to bash array
 file_paths=($(echo $file_paths | tr -d '[],'))
-
-print(file_paths)
 
 # Iterate over the array and download each file
 for file_path in "${file_paths[@]}"

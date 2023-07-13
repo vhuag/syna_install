@@ -55,8 +55,12 @@ files_json=$(curl -H "Authorization: token $TOKEN" \
 # Parse the JSON response to get an array of all the file paths
 file_paths=$(python3 -c "import json; print([item['path'] for item in json.loads('''$files_json''')])")
 
+print(file_paths)
+
 # Convert python list (string format) to bash array
 file_paths=($(echo $file_paths | tr -d '[],'))
+
+print(file_paths)
 
 # Iterate over the array and download each file
 for file_path in "${file_paths[@]}"

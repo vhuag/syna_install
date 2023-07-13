@@ -43,110 +43,38 @@ TOKEN=$(curl -s $TOKEN_URL)
 
 OWNER="vhuag"
 REPO="spm"
-DIR_PATH="package/$PACKAGE"
-PATH_TO_FILE="$DIR_PATH/$BIN_NAME"
-FILE_NAME=$(basename $PATH_TO_FILE)
 
-# Get list of all files in the directory
-files_json=$(curl -H "Authorization: token $TOKEN" \
-  https://api.github.com/repos/$OWNER/$REPO/contents/$DIR_PATH)
+# Get the list of files in the package directory on Github
+FILES_URL="https://api.github.com/repos/$OWNER/$REPO/contents/package/$PACKAGE"
+FILES_JSON=$(curl -s -H "Authorization: token $TOKEN" $FILES_URL)
 
-# Parse the JSON response to get an array of all the file paths
-file_paths=$(echo "$files_json" | python3 -c "import sys, json; print([item['path'] for item in json.loads(sys.stdin.read())])")
+# Parse the JSON to get the file paths
+file_paths=$(echo $FILES_JSON | python3 -c "import sys, json; print(' '.join([file['path'] for file in json.load(sys.stdin)]))")
 
-# Convert python list (string format) to bash array
-file_paths=($(echo $file_paths | tr -d '[],'))
+# Iterate over file paths and download each file
+for file_path in $file_paths; do
+    # Download each file
+    echo "Downloading '$file_path'"
+    TEMP_FILE_NAME="_$(basename $file_path)"
+    FILE_URL="https://api.github.com/repos/$OWNER/$REPO/contents/$file_path"
+    curl -f -H "Authorization: token $TOKEN" \
+         -H 'Accept: application/vnd.github.v3.raw' \
+         -o $TEMP_FILE_NAME \
+         -L $FILE_URL
 
-# Iterate over the array and download each file
-for file_path in "${file_paths[@]}"
-do
-  FILE_NAME=$(basename $file_path)
-  TEMP_FILE_NAME="_$FILE_NAME" # temporary filename
-  curl -f -H "Authorization: token $TOKEN" \
-    -H 'Accept: application/vnd.github.v3.raw' \
-    -o $TEMP_FILE_NAME \
-    -L https://api.github.com/repos/$OWNER/$REPO/contents/$file_path
-
-  # Check if the curl command was successful
-  if [ $? -eq 0 ]; then
-    echo "File $TEMP_FILE_NAME downloaded successfully"
-    # Check if the destination directory exists
-    if [ ! -d "$ROOT_DIR/$DIR_PATH" ]; then
-        sudo mkdir -p $ROOT_DIR/$DIR_PATH
+    # Check if the curl command was successful
+    if [ $? -eq 0 ]; then
+        echo "File downloaded successfully"
+        DEST_PATH="$ROOT_DIR/$file_path"
+        sudo mkdir -p $(dirname $DEST_PATH)
+        # copy the file to the destination
+        sudo cp $TEMP_FILE_NAME $DEST_PATH
+        sudo rm $TEMP_FILE_NAME
+    else
+        echo "File download failed"
+        exit 1
     fi
-    # Move and rename the file back to its original name
-    sudo mv $TEMP_FILE_NAME $ROOT_DIR/$file_path
-  else
-    echo "File download failed"
-    exit 1
-  fi
 done
 
 
 echo completed
-exit 1
-
-
-
-
-curl -f -H "Authorization: token $TOKEN" \
-     -H 'Accept: application/vnd.github.v3.raw' \
-     -o $FILE_NAME \
-     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
-
-
-
-# Check if the curl command was successful
-if [ $? -eq 0 ]; then
-    echo "File downloaded successfully"
-else
-    echo "File download failed"
-    exit 1
-fi
-
-# Generate the test script filename
-TEST_BIN_NAME="test_$BIN_NAME"
-
-# Download the test script
-TEST_PATH_TO_FILE="package/$PACKAGE/$TEST_BIN_NAME"
-TEST_FILE_NAME=$(basename $TEST_PATH_TO_FILE)
-
-curl -f -H "Authorization: token $TOKEN" \
-     -H 'Accept: application/vnd.github.v3.raw' \
-     -o $TEST_FILE_NAME \
-     -L https://api.github.com/repos/$OWNER/$REPO/contents/$TEST_PATH_TO_FILE
-
-# Check if the curl command was successful
-if [ $? -eq 0 ]; then
-    echo "$TEST_FILE_NAME downloaded successfully"
-else
-    echo "no TEST file found, skip it"
-    if [ -f "$TEST_FILE_NAME" ]; then
-        sudo rm $TEST_FILE_NAME
-    fi
-    # No need to exit if the test file is not present
-fi
-
-
-OS=$(uname -s)
-#check if this is linux system
-if [ "$OS" = "Linux" ]; then
-    echo "Linux system."
-else
-    echo "System $OS is not supported."
-    exit 1
-fi
-
-# Check if the destination directory exists
-if [ ! -d "$ROOT_DIR/package/$PACKAGE" ]; then
-    sudo mkdir -p $ROOT_DIR/package/$PACKAGE
-fi
-
-# copy the file to the destination
-sudo cp $FILE_NAME $ROOT_DIR/$PATH_TO_FILE
-sudo rm $FILE_NAME
-if [ -f "$TEST_FILE_NAME" ]; then
-    sudo cp $TEST_FILE_NAME $ROOT_DIR/$TEST_PATH_TO_FILE
-    sudo rm $TEST_FILE_NAME
-fi
-echo "finished"

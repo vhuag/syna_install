@@ -1,6 +1,6 @@
 #!/bin/bash
 INSTALLER_MAJOR="1"
-INSTALLER_MINOR="51"
+INSTALLER_MINOR="52"
 echo "Installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
 
 sudo echo  "--"

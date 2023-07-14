@@ -1,6 +1,6 @@
 #!/bin/bash
 INSTALLER_MAJOR="1"
-INSTALLER_MINOR="52"
+INSTALLER_MINOR="51"
 echo "Installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
 
 sudo echo  "--"
@@ -188,12 +188,11 @@ sudo pip3 install pytest-html
 sudo pip3 install requests
 
 #check if spm.json in this folder
-if [ -f "spm.json" ]; then
+if [ ! -f "spm.json" ]; then
     spm install getfw
     spm install run_rmi4update
     echo "default packages installed"
 fi
-
 
 # Echo a success message
 echo "Installation complete."

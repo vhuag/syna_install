@@ -3,6 +3,7 @@ INSTALLER_MAJOR="1"
 INSTALLER_MINOR="51"
 echo "Installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
 
+sudo echo  "--"
 # Check if a version number was provided
 if [ -z "$1" ]; then
     echo "No version specified, will get latest one."

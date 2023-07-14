@@ -187,5 +187,13 @@ sudo pip3 install pytest-html
 #install requests
 sudo pip3 install requests
 
+#check if spm.json in this folder
+if [ -f "spm.json" ]; then
+    spm install getfw
+    spm install run_rmi4update
+    echo "default packages installed"
+fi
+
+
 # Echo a success message
 echo "Installation complete."

@@ -194,5 +194,23 @@ if [ ! -f "spm.json" ]; then
     echo "default packages installed"
 fi
 
+
+# Create the udev rules file
+echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*:06CB:*", MODE="0666"' > 99-synaptics.rules
+
+# Copy the udev rules file to the udev rules directory
+sudo cp 99-synaptics.rules /etc/udev/rules.d/
+
+# Change the owner and group of the udev rules file to root
+sudo chown root:root /etc/udev/rules.d/99-synaptics.rules
+
+# Set the permissions of the udev rules file
+sudo chmod 644 /etc/udev/rules.d/99-synaptics.rules
+
+# Reload the udev rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+
+echo "udev rules updated"
+
 # Echo a success message
 echo "Installation complete."

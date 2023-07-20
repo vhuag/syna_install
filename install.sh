@@ -173,6 +173,7 @@ sudo mkdir -p /etc/spm/package
 echo "spm installed successfully"
 
 sudo add-apt-repository universe
+sudo apt-get update
 
 #install python3
 sudo apt-get install python3

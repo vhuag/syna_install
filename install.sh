@@ -172,19 +172,28 @@ sudo mv $JSON_FILE_NAME /etc/spm/spm.json
 sudo mkdir -p /etc/spm/package
 echo "spm installed successfully"
 
-sudo add-apt-repository universe
-sudo apt-get update
 
-#install python3
-sudo apt-get install python3
 
-#install python3-pip
-sudo apt-get install python3-pip
+#check if python3 is installed
+if [ ! -f "/usr/bin/python3" ]; then
+    #install python3
+    sudo apt-get install python3
+fi
 
-#install pytest
-sudo pip3 install pytest
+#check if python3-pip is installed
+if [ ! -f "/usr/bin/pip3" ]; then
+    sudo add-apt-repository universe
+    sudo apt-get update
+    #install python3-pip
+    sudo apt-get install python3-pip
+fi
 
-#install pytest-html
+#check if python module pytest is installed
+if [ ! -f "/usr/local/bin/pytest" ]; then
+    #install pytest
+    sudo pip3 install pytest
+fi
+
 sudo pip3 install pytest-html
 
 #install requests

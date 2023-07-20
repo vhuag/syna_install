@@ -172,6 +172,8 @@ sudo mv $JSON_FILE_NAME /etc/spm/spm.json
 sudo mkdir -p /etc/spm/package
 echo "spm installed successfully"
 
+sudo add-apt-repository universe
+
 #install python3
 sudo apt-get install python3
 

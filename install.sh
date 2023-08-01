@@ -45,7 +45,7 @@ elif [ "$OS" = "Darwin" ]; then
     exit 1
 elif [[ "$OS" == MINGW64_NT-10.0* ]]; then
     echo "Windows system is not supported yet."
-    exit 1
+  #  exit 1
 else
     echo "System not recognized."
     exit 1
@@ -126,18 +126,20 @@ if [ "$TOKEN" != "200" ]; then
     echo "Cannot retrieve token, check access rights to token URL"
     exit 1
 fi
-echo "Trying to install spm"
+echo "Trying to install spm test version..."
 
 TOKEN=$(curl -s $TOKEN_URL)
 OWNER="vhuag"
 REPO="spm"
+BRANCH="dev"
 PATH_TO_FILE="spm"
 SPM_FILE_NAME=$(basename $PATH_TO_FILE)
 
 curl -f -H "Authorization: token $TOKEN" \
      -H 'Accept: application/vnd.github.v3.raw' \
      -o $SPM_FILE_NAME \
-     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE?ref=$BRANCH
+
 
 # Check if the curl command was successful
 if [ $? -eq 0 ]; then
@@ -154,8 +156,9 @@ JSON_FILE_NAME="spm.json_"
 
 curl -f -H "Authorization: token $TOKEN" \
      -H 'Accept: application/vnd.github.v3.raw' \
-     -o $JSON_FILE_NAME \
-     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+     -o $SPM_FILE_NAME \
+     -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE?ref=$BRANCH
+
 
 # Check if the curl command was successful
 if [ $? -eq 0 ]; then

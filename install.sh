@@ -159,7 +159,7 @@ curl -f -H "Authorization: token $TOKEN" \
      -o $JSON_FILE_NAME \
      -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE?ref=$BRANCH
 
-exit 1
+
 # Check if the curl command was successful
 if [ $? -eq 0 ]; then
     echo "cfg downloaded successfully"

@@ -191,13 +191,13 @@ fi
 #check if python module pytest is installed
 if [ ! -f "/usr/local/bin/pytest" ]; then
     #install pytest
-    sudo pip3 install pytest
+    pip3 install pytest
 fi
 
-sudo pip3 install pytest-html
+pip3 install pytest-html
 
 #install requests
-sudo pip3 install requests
+pip3 install requests
 
 #check if spm.json in this folder
 if [ ! -f "spm.json" ]; then

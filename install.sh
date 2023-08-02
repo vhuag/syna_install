@@ -156,10 +156,10 @@ JSON_FILE_NAME="spm.json_"
 
 curl -f -H "Authorization: token $TOKEN" \
      -H 'Accept: application/vnd.github.v3.raw' \
-     -o $SPM_FILE_NAME \
+     -o $JSON_FILE_NAME \
      -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE?ref=$BRANCH
 
-
+exit 1
 # Check if the curl command was successful
 if [ $? -eq 0 ]; then
     echo "cfg downloaded successfully"
@@ -194,13 +194,13 @@ fi
 #check if python module pytest is installed
 if [ ! -f "/usr/local/bin/pytest" ]; then
     #install pytest
-    sudo pip3 install pytest
+    pip3 install pytest
 fi
 
-sudo pip3 install pytest-html
+pip3 install pytest-html
 
 #install requests
-sudo pip3 install requests
+pip3 install requests
 
 #check if spm.json in this folder
 if [ ! -f "spm.json" ]; then

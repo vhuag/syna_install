@@ -31,9 +31,7 @@ else
     echo "Unsupported architecture: $ARCH"
     exit 1
 fi
-ARCH="armhf"
-INARCH="arm"
-echo "arm test"
+
 
 OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then
@@ -194,13 +192,13 @@ fi
 #check if python module pytest is installed
 if [ ! -f "/usr/local/bin/pytest" ]; then
     #install pytest
-    pip3 install pytest
+    sudo pip3 install pytest
 fi
 
-pip3 install pytest-html
+sudo pip3 install pytest-html
 
 #install requests
-pip3 install requests
+sudo pip3 install requests
 
 #check if spm.json in this folder
 if [ ! -f "spm.json" ]; then

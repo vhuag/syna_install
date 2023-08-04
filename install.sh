@@ -31,6 +31,9 @@ else
     echo "Unsupported architecture: $ARCH"
     exit 1
 fi
+ARCH="armhf"
+INARCH="arm"
+echo "arm test"
 
 OS=$(uname -s)
 if [ "$OS" = "Linux" ]; then

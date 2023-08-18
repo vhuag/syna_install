@@ -193,12 +193,21 @@ fi
 if [ ! -f "/usr/local/bin/pytest" ]; then
     #install pytest
     sudo pip3 install pytest
+    #install by apt if the pip install is failed
+    if [ ! -f "/usr/local/bin/pytest" ]; then
+        sudo apt-get install python3-pytest
+    fi
 fi
 
 sudo pip3 install pytest-html
 
 #install requests
 sudo pip3 install requests
+#install by apt if the pip install is failed
+if [ ! -f "/usr/local/bin/requests" ]; then
+    sudo apt-get install python3-requests
+fi
+
 
 #check if spm.json in this folder
 if [ ! -f "spm.json" ]; then
@@ -206,6 +215,8 @@ if [ ! -f "spm.json" ]; then
     spm install run_rmi4update
     echo "default packages installed"
 fi
+
+
 
 
 # Create the udev rules file

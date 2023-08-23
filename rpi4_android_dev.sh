@@ -53,7 +53,46 @@ function download_build_scripts()
     echo ""
     echo "Download build scripts"
     echo ""
-    
+    #make sure there are aosp and kernel folder in this folder
+    if [ ! -d "aosp" ]; then
+        echo "aosp folder not found, please download android rpi4 source code first"
+       # exit 1
+    fi
+    if [ ! -d "kernel" ]; then
+        echo "kernel folder not found, please download android rpi4 kernel source code first"
+       # exit 1
+    fi
+    cat << 'EOF' > build_aosp.sh
+#!/bin/bash
+(
+    cd aosp
+    . build/envsetup.sh
+    lunch aosp_rpi4-userdebug
+    make bootimage systemimage vendorimage -j\$(nproc)
+    ./rpi4-mkimg.sh
+)
+EOF
+    chmod +x build_aosp.sh
+    cat << 'EOF' > build_kernel.sh
+#!/bin/bash
+(
+    cd kernel
+    BUILD_CONFIG=common/build.config.rpi4 build/build.sh
+)
+EOF
+    chmod +x build_kernel.sh
+    cat << 'EOF' > integrate.sh
+#!/bin/bash
+(
+    cp kernel/out/common/arch/arm64/boot/Image aosp/device/brcm/rpi4-kernel/
+    echo "copied image done"
+    cp kernel/out/common/arch/arm64/boot/dts/broadcom/*.dtb aosp/device/brcm/rpi4-kernel/
+    echo "copied all dtb files"
+    cp kernel/out/common/arch/arm64/boot/dts/overlays aosp/device/brcm/rpi4-kernel/ -r
+    echo "overlays copied finished"
+)
+EOF
+    chmod +x integrate.sh
 }
 
 

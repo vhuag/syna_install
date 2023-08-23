@@ -10,6 +10,75 @@ if [ -z "$1" ]; then
 fi
 
 
+#function to install spm on windows
+function install_spm_win(){
+    TOKEN_URL="http://pc.synaptics.com:8888/resources/driver1/spm/spm_token.txt"
+    TOKEN=$(curl -s -w "%{http_code}" -o /dev/null $TOKEN_URL)
+
+    if [ "$TOKEN" != "200" ]; then
+        echo "Cannot retrieve token, check access rights to token URL"
+        exit 1
+    fi
+    echo "Trying to install spm"
+
+    TOKEN=$(curl -s $TOKEN_URL)
+    OWNER="vhuag"
+    REPO="spm"
+    PATH_TO_FILE="spm"
+    SPM_FILE_NAME=$(basename $PATH_TO_FILE)
+
+    curl -f -H "Authorization: token $TOKEN" \
+        -H 'Accept: application/vnd.github.v3.raw' \
+        -o $SPM_FILE_NAME \
+        -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+
+    # Check if the curl command was successful
+    if [ $? -eq 0 ]; then
+        echo "spm downloaded successfully"
+    else
+        echo "spm download failed"
+        exit 1
+    fi
+    PATH_TO_FILE="spm.json"
+    JSON_FILE_NAME="spm.json_"
+
+    curl -f -H "Authorization: token $TOKEN" \
+        -H 'Accept: application/vnd.github.v3.raw' \
+        -o $JSON_FILE_NAME \
+        -L https://api.github.com/repos/$OWNER/$REPO/contents/$PATH_TO_FILE
+
+    # Check if the curl command was successful
+    if [ $? -eq 0 ]; then
+        echo "cfg downloaded successfully"
+    else
+        echo "cfg download failed"
+        exit 1
+    fi
+
+    mkdir -p c:\\spm
+    mv $SPM_FILE_NAME c:\\spm\\spm
+    mv $JSON_FILE_NAME c:\\spm\\spm.json
+    #create folder for spm packages
+    mkdir -p c:\\spm\\package
+
+    # Create the batch file content
+    BAT_CONTENT="@echo off\npython C:\\spm\\spm %*"
+
+    # Write the content to a temporary batch file
+    echo -e $BAT_CONTENT > spm.bat
+
+    # Move the batch file to the target directory
+    mv spm.bat c:\\spm\\spm.bat
+
+    # (existing code) ...
+    
+    # Add the directory to the system's PATH (optional)
+    setx PATH "%PATH%;c:\\spm"
+
+    echo "spm installed successfully"
+}
+
+
 # Determine the architecture of the system
 ARCH=$(uname -m)
 echo "Architecture: $ARCH"
@@ -46,6 +115,13 @@ elif [ "$OS" = "Darwin" ]; then
     exit 1
 elif [[ "$OS" == MINGW64_NT-10.0* ]]; then
     echo "Windows system is not supported yet."
+    #ask user if they want to install spm
+    read -p "Do you want to install spm? (y/n)" -n 1 -r
+    #if they want to install spm
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    #call function to install spm
+        install_spm_win
+    fi
     exit 1
 else
     echo "System not recognized."
@@ -127,6 +203,8 @@ if [ "$TOKEN" != "200" ]; then
     echo "Cannot retrieve token, check access rights to token URL"
     exit 1
 fi
+
+
 echo "Trying to install spm"
 
 TOKEN=$(curl -s $TOKEN_URL)
@@ -238,3 +316,6 @@ echo "udev rules updated"
 
 # Echo a success message
 echo "Installation complete."
+
+exit 0
+

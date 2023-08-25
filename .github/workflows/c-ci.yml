@@ -13,16 +13,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Update minor version and commit message
+      - name: Detect modified files
+        id: detect-changes
         run: |
-          major=$(grep -oP 'INSTALLER_MAJOR="\K\d+' install.sh)
-          minor=$(grep -oP 'INSTALLER_MINOR="\K\d+' install.sh)
-          minor=$((minor + 1))
-          sed -ri "s/(INSTALLER_MINOR=\")([0-9]+)/\1$minor/" install.sh
-          git config --local user.email "vincenth@synaptics.com"
-          git config --local user.name "Vincent Huang"
-          git add install.sh
-          git commit -m "Update installer version to $major.$minor"
+          FILES=$(git diff --name-only HEAD~1 HEAD)
+          echo "Modified files: $FILES"
+          echo "FILES=$FILES" >> $GITHUB_ENV
+
+      - name: Update minor version and commit message for modified files
+        run: |
+          for FILE in $FILES; do
+            if [[ $FILE == *"install.sh"* ]]; then
+              major=$(grep -oP 'INSTALLER_MAJOR="\K\d+' $FILE)
+              minor=$(grep -oP 'INSTALLER_MINOR="\K\d+' $FILE)
+              minor=$((minor + 1))
+              sed -ri "s/(INSTALLER_MINOR=\")([0-9]+)/\1$minor/" $FILE
+              git config --local user.email "vincenth@synaptics.com"
+              git config --local user.name "Vincent Huang"
+              git add $FILE
+              git commit -m "Update installer version in $FILE to $major.$minor"
+            fi
+          done
 
       - name: Push changes
         uses: ad-m/github-push-action@master

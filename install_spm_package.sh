@@ -1,5 +1,9 @@
 #/bin/bash
 
+INSTALLER_MAJOR="1"
+INSTALLER_MINOR="1"
+echo "SPM package installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
+
 for arg in "$@"
 do
   key=$(echo $arg | cut -f1 -d=)

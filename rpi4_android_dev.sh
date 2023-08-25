@@ -124,8 +124,6 @@ function build_aosp()
 }
 
 
-
-
 #function to download build scripts
 function download_build_scripts()
 {

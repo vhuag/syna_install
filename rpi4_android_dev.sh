@@ -2,6 +2,7 @@
 
 INSTALLER_MAJOR="1"
 INSTALLER_MINOR="2"
+echo ""
 echo "RPI4 android dev installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
 
 #function to install android development environment
@@ -241,6 +242,5 @@ function main_menu() {
     done
 }
 
-echo "Install android development environment for rpi4"
 main_menu
 

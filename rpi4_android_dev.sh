@@ -243,3 +243,5 @@ function main_menu() {
 
 echo "Install android development environment for rpi4"
 main_menu
+
+echo "Finished"

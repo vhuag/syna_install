@@ -133,12 +133,10 @@ function download_build_scripts()
     echo ""
     #make sure there are aosp and kernel folder in this folder
     if [ ! -d "aosp" ]; then
-        echo "aosp folder not found, please download android rpi4 source code first"
-        return
+        echo "[warning]aosp folder not found, please download android rpi4 source code first"
     fi
     if [ ! -d "kernel" ]; then
-        echo "kernel folder not found, please download android rpi4 kernel source code first"
-        return
+        echo "[warning]kernel folder not found, please download android rpi4 kernel source code first"
     fi
     cat << 'EOF' > build_aosp.sh
 #!/bin/bash

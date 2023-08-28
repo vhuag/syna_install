@@ -1,7 +1,7 @@
 #!/bin/bash
 
 INSTALLER_MAJOR="1"
-INSTALLER_MINOR="4"
+INSTALLER_MINOR="5"
 echo ""
 echo "RPI4 android dev installer version: $INSTALLER_MAJOR.$INSTALLER_MINOR"
 

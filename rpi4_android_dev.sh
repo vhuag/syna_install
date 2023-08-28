@@ -144,7 +144,7 @@ function download_build_scripts()
     cd aosp
     . build/envsetup.sh
     lunch aosp_rpi4-userdebug
-    make bootimage systemimage vendorimage -j\$(nproc)
+    make bootimage systemimage vendorimage -j$(nproc)
     ./rpi4-mkimg.sh
 )
 EOF

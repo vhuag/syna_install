@@ -8,6 +8,9 @@ param(
     [string[]]$args
 )
 
+#print out the arguments
+Write-Host "Python folder path: $pythonFolderPath"
+Write-Host "Remaining arguments: $args"
 # Add Python folder path to PATH environment variable for this session
 $env:Path = "$env:Path;$pythonFolderPath"
 

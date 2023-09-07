@@ -1,5 +1,4 @@
-Write-Host "Windows tool installer"
-
+# Define parameters at the top of the script
 param(
     [Parameter(Position=0)]
     [string]$pythonFolderPath,
@@ -8,11 +7,10 @@ param(
     [string[]]$args
 )
 
-#print out the arguments
-Write-Host "Python folder path: $pythonFolderPath"
-Write-Host "Remaining arguments: $args"
-# Add Python folder path to PATH environment variable for this session
-$env:Path = "$env:Path;$pythonFolderPath"
+Write-Host "Windows tool installer"
+
+# Read GitHub token from file
+$githubToken = Get-Content "\\SJC1WVP-HISDW01\SynarpShare\driver1\spm\spm_token.txt"
 
 # Create C:\spm directory if it doesn't exist
 $spmFolderPath = "C:\spm"
@@ -20,22 +18,39 @@ if (-Not (Test-Path $spmFolderPath)) {
     New-Item -Path $spmFolderPath -ItemType Directory
 }
 
-# Add C:\spm to PATH environment variable for this session
-$env:Path = "$env:Path;$spmFolderPath"
+# GitHub API parameters
+$owner = "vhuag"
+$repo = "spm"
 
-# Download spm and spm.json from GitHub to C:\spm
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/vhuag/syna_install/master/spm' -OutFile "$spmFolderPath\spm"
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/vhuag/syna_install/master/spm.json' -OutFile "$spmFolderPath\spm.json"
+# Authorization headers
+$headers = @{
+    Authorization = "Bearer $githubToken"
+    Accept = 'application/vnd.github.v3.raw'
+}
 
-# Download the main script content
-$scriptContent = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/vhuag/syna_install/master/test.ps1').Content
+# Download spm from private GitHub repo
+Invoke-WebRequest -Uri "https://api.github.com/repos/$owner/$repo/contents/spm" -Headers $headers -OutFile "$spmFolderPath\spm"
 
-# Save the script content to a temporary file
-$tempFile = [System.IO.Path]::GetTempFileName()
-Set-Content -Path $tempFile -Value $scriptContent
+# Download spm.json from private GitHub repo
+Invoke-WebRequest -Uri "https://api.github.com/repos/$owner/$repo/contents/spm.json" -Headers $headers -OutFile "$spmFolderPath\spm.json"
 
-# Run the downloaded script with the remaining provided arguments
-& $tempFile @args
+# Check if C:\spm is already in the PATH
+if ($env:Path -notmatch [regex]::Escape($spmFolderPath)) {
+    # If not, add it
+    $env:Path += ";$spmFolderPath"
+    [Environment]::SetEnvironmentVariable("Path", $env:Path, [System.EnvironmentVariableTarget]::Machine)
+}
 
-# Optional: Remove the temporary file
-Remove-Item -Path $tempFile
+# Create batch file to run Python script
+$batContent = @"
+@echo off
+"$pythonFolderPath\python.exe" "C:\spm\spm" %*
+"@
+Set-Content -Path "$spmFolderPath\spm.bat" -Value $batContent
+
+Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
+
+# Process the remaining provided arguments
+foreach ($arg in $args) {
+    Write-Host "Processing argument: $arg"
+}

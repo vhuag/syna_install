@@ -6,7 +6,15 @@ param(
     [Parameter(Position=1, ValueFromRemainingArguments = $true)]
     [string[]]$args
 )
-
+# check if pythonFolderPath exists and python.exe in this folder
+if (-Not (Test-Path $pythonFolderPath)) {
+    Write-Host "Python folder path does not exist: $pythonFolderPath"
+    exit 1
+}
+if (-Not (Test-Path "$pythonFolderPath\python.exe")) {
+    Write-Host "Python executable does not exist in folder: $pythonFolderPath"
+    exit 1
+}
 Write-Host "Windows tool installer"
 
 # Read GitHub token from file

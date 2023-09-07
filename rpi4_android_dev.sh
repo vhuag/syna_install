@@ -13,6 +13,7 @@ function install_android_dev_env()
     echo ""
     sudo apt-get update
     sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+    sudo apt-get install python3 python-is-python3
     echo "Trying to create bin folder"
     mkdir -p ~/bin
     echo "set bin to path and set it to permanent"

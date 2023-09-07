@@ -213,13 +213,13 @@ function main_menu() {
                 fi
                 ;;
             2)
-                read -p "Do you want to download android rpi4 source code? (y/n)" -n 1 -r
+                read -p "Do you want to download android rpi4 source code? (needs at least 200GB) (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     download_android_rpi4_source_code
                 fi
                 ;;
             3)
-                read -p "Do you want to download android rpi4 kernel source code? (y/n)" -n 1 -r
+                read -p "Do you want to download android rpi4 kernel source code? (needs at least 10GB) (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     download_android_rpi4_kernel_source_code
                 fi

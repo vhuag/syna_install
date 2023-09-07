@@ -277,6 +277,16 @@ if [ ! -f "/usr/local/bin/pytest" ]; then
     fi
 fi
 
+#check if python module pymongo is installed
+if [ ! -f "/usr/local/bin/pymongo" ]; then
+    #install pymongo
+    sudo pip3 install pymongo
+    #install by apt if the pip install is failed
+    if [ ! -f "/usr/local/bin/pymongo" ]; then
+        sudo apt-get install python3-pymongo
+    fi
+fi
+
 sudo pip3 install pytest-html
 
 #install requests

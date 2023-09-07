@@ -25,14 +25,16 @@ jobs:
       - name: Update minor version and commit message for modified files
         run: |
           for FILE in $FILES; do
-            major=$(grep -oP 'INSTALLER_MAJOR="\K\d+' $FILE)
-            minor=$(grep -oP 'INSTALLER_MINOR="\K\d+' $FILE)
-            minor=$((minor + 1))
-            sed -ri "s/(INSTALLER_MINOR=\")([0-9]+)/\1$minor/" $FILE
-            git config --local user.email "vincenth@synaptics.com"
-            git config --local user.name "Vincent Huang"
-            git add $FILE
-            git commit -m "Update installer version in $FILE to $major.$minor"
+            if [[ $FILE == *.sh ]]; then
+              major=$(grep -oP 'INSTALLER_MAJOR="\K\d+' $FILE)
+              minor=$(grep -oP 'INSTALLER_MINOR="\K\d+' $FILE)
+              minor=$((minor + 1))
+              sed -ri "s/(INSTALLER_MINOR=\")([0-9]+)/\1$minor/" $FILE
+              git config --local user.email "vincenth@synaptics.com"
+              git config --local user.name "Vincent Huang"
+              git add $FILE
+              git commit -m "Update installer version in $FILE to $major.$minor"
+            fi
           done
 
       - name: Push changes

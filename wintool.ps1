@@ -18,6 +18,7 @@ if (-Not (Test-Path $spmFolderPath)) {
     New-Item -Path $spmFolderPath -ItemType Directory
 }
 
+
 # GitHub API parameters
 $owner = "vhuag"
 $repo = "spm"
@@ -34,6 +35,16 @@ Invoke-WebRequest -Uri "https://api.github.com/repos/$owner/$repo/contents/spm" 
 # Download spm.json from private GitHub repo
 Invoke-WebRequest -Uri "https://api.github.com/repos/$owner/$repo/contents/spm.json" -Headers $headers -OutFile "$spmFolderPath\spm.json"
 
+
+# Ensure the directory structure exists
+$dirPath = "$spmFolderPath\package\log_uploader"
+if (-Not (Test-Path $dirPath)) {
+    New-Item -Path $dirPath -ItemType Directory
+}
+
+
+Invoke-WebRequest -Uri "https://api.github.com/repos/$owner/$repo/contents/package/log_uploader/log_uploader.py" -Headers $headers -OutFile "$spmFolderPath\package\log_uploader\log_uploader.py"
+
 # Check if C:\spm is already in the PATH
 if ($env:Path -notmatch [regex]::Escape($spmFolderPath)) {
     # If not, add it
@@ -49,6 +60,7 @@ $batContent = @"
 Set-Content -Path "$spmFolderPath\spm.bat" -Value $batContent
 
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
+Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
 
 # Process the remaining provided arguments
 foreach ($arg in $args) {

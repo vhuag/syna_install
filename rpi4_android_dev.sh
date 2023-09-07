@@ -13,6 +13,11 @@ function install_android_dev_env()
     echo ""
     sudo apt-get update
     sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 libncurses5 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
+    echo "Trying to create bin folder"
+    mkdir -p ~/bin
+    echo "set bin to path and set it to permanent"
+    echo 'export PATH=~/bin:$PATH' >> ~/.bashrc
+    export PATH=~/bin:$PATH
     echo "Trying to install repo"
     export REPO=$(mktemp /tmp/repo.XXXXXXXXX)
     curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
@@ -198,7 +203,7 @@ function main_menu() {
 
         case $REPLY in
             1)
-                read -p "Do you want to download android rpi4 source code? (y/n)" -n 1 -r
+                read -p "Do you want to download android rpi4 environment? (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     install_android_dev_env
                 fi

@@ -217,7 +217,7 @@ function main_menu() {
         echo ""
 
         #if user input invalid, just loop here and wait for valid input
-        while [[ ! $REPLY =~ ^[1-7]$ ]]; do
+        while [[ ! $REPLY =~ ^[1-8]$ ]]; do
             read -p "Invalid input, please input again:
 " -n 1 -r
             echo ""

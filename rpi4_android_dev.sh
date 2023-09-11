@@ -187,9 +187,9 @@ function install_android_app_dev_env()
     echo "Download android ndk"
     echo ""
     #download ndk from http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
-    #curl -o android-ndk-r25c-linux.zip http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
-    #unzip android-ndk-r25c-linux.zip
-    #rm android-ndk-r25c-linux.zip
+    curl -o android-ndk-r25c-linux.zip http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
+    unzip android-ndk-r25c-linux.zip
+    rm android-ndk-r25c-linux.zip
     # Get current directory
     current_dir=$(pwd)
     # Export path to .bashrc
@@ -225,13 +225,13 @@ function main_menu() {
 
         case $REPLY in
             1)
-                read -p "Do you want to install android system develop environment?\nThis step is required any developer (y/n)" -n 1 -r
+                read -p $'Do you want to install android system develop environment?\nThis step is required any developer (y/n) ' -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     install_android_dev_env
                 fi
                 ;;
             2)
-                read -p "Do you want to install android application develop environment?\nThis step is required by anyone who needs to develop application (y/n)" -n 1 -r
+                read -p $'Do you want to install android application develop environment?\nThis step is required by anyone who needs to develop application (y/n) ' -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     install_android_app_dev_env
                 fi

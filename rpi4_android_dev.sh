@@ -223,15 +223,13 @@ function main_menu() {
 
         case $REPLY in
             1)
-                read -p "Do you want to install android system develop environment?
-                This step is required any developer (y/n)" -n 1 -r
+                read -p "Do you want to install android system develop environment?\nThis step is required any developer (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     install_android_dev_env
                 fi
                 ;;
             2)
-                read -p "Do you want to install android application develop environment?
-                This step is required by anyone who needs to develop application (y/n)" -n 1 -r
+                read -p "Do you want to install android application develop environment?\nThis step is required by anyone who needs to develop application (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     install_android_app_dev_env
                 fi

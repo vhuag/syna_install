@@ -187,11 +187,13 @@ function install_android_app_dev_env()
     echo "Download android ndk"
     echo ""
     #download ndk from http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
-    curl -o android-ndk-r25c-linux.zip http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
-    unzip android-ndk-r25c-linux.zip
-    rm android-ndk-r25c-linux.zip
-    #export path to .bashrc
-    echo 'export PATH=~/android-ndk-r25c:$PATH' >> ~/.bashrc
+    #curl -o android-ndk-r25c-linux.zip http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
+    #unzip android-ndk-r25c-linux.zip
+    #rm android-ndk-r25c-linux.zip
+    # Get current directory
+    current_dir=$(pwd)
+    # Export path to .bashrc
+    echo "export PATH=$current_dir/android-ndk-r25c:\$PATH" >> ~/.bashrc
     echo "Please restart this script to continue"
     exec bash
 }

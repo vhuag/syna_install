@@ -180,19 +180,35 @@ EOF
     chmod +x integrate.sh
 }
 
+#function to install android application development environment
+function install_android_app_dev_env()
+{
+    echo ""
+    echo "Download android ndk"
+    echo ""
+    #download ndk from http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
+    curl -o android-ndk-r25c-linux.zip http://pc.synaptics.com:8888/resources/android_ndk/r25c/android-ndk-r25c-linux.zip
+    unzip android-ndk-r25c-linux.zip
+    rm android-ndk-r25c-linux.zip
+    #export path to .bashrc
+    echo 'export PATH=~/android-ndk-r25c:$PATH' >> ~/.bashrc
+    echo "Please restart this script to continue"
+    exec bash
+}
 # ... function definitions ...
 
 function main_menu() {
     while true; do
         echo ""
         read -p "Choose the steps you want to do:
-1 - install android development environment,
-2 - download android rpi4 source code,
-3 - download android rpi4 kernel source code,
-4 - download build scripts,
-5 - build aosp,
-6 - build kernel,
-7 - exit
+1 - install android system development environment,
+2 - install android application development environment,
+3 - download android rpi4 source code,
+4 - download android rpi4 kernel source code,
+5 - download build scripts,
+6 - build aosp,
+7 - build kernel,
+8 - exit
 " -n 1 -r
 
         # output change line
@@ -207,42 +223,48 @@ function main_menu() {
 
         case $REPLY in
             1)
-                read -p "Do you want to download android rpi4 environment? (y/n)" -n 1 -r
+                read -p "Do you want to download android rpi4 system environment? (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     install_android_dev_env
                 fi
                 ;;
             2)
+                read -p "Do you want to download android application development environment? (y/n)" -n 1 -r
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    install_android_app_dev_env
+                fi
+                ;;
+            3)
                 read -p "Do you want to download android rpi4 source code? (needs at least 200GB) (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     download_android_rpi4_source_code
                 fi
                 ;;
-            3)
+            4)
                 read -p "Do you want to download android rpi4 kernel source code? (needs at least 10GB) (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     download_android_rpi4_kernel_source_code
                 fi
                 ;;
-            4)
+            5)
                 read -p "Do you want to download build scripts? (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     download_build_scripts
                 fi
                 ;;
-            5)
+            6)
                 read -p "Do you want to build aosp? (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     build_aosp
                 fi
                 ;;
-            6)
+            7)
                 read -p "Do you want to build kernel? (y/n)" -n 1 -r
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
                     build_kernel
                 fi
                 ;;
-            7)
+            8)
                 exit 0
                 ;;
         esac

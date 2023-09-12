@@ -71,6 +71,6 @@ Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
 
 # Process the remaining provided arguments
-foreach ($arg in $remainingArgs) {
-    Write-Host "Processing argument: $arg"
+foreach ($eacharg in $remainingArgs) {
+    Write-Host "Processing argument: $eacharg"
 }

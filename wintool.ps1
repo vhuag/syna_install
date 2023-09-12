@@ -1,12 +1,9 @@
-# Define parameters at the top of the script
-param(
-    [Parameter(Position=0)]
-    [string]$pythonFolderPath,
 
-    [Parameter(Position=1, ValueFromRemainingArguments = $true)]
-    [string[]]$remainingArgs
-)
-# check if pythonFolderPath exists and python.exe in this folder
+
+# Prompt user for Python folder path
+$pythonFolderPath = Read-Host -Prompt 'Enter the Python folder path'
+
+# Check if pythonFolderPath exists and python.exe is in this folder
 if (-Not (Test-Path $pythonFolderPath)) {
     Write-Host "Python folder path does not exist: $pythonFolderPath"
     exit 1
@@ -15,6 +12,9 @@ if (-Not (Test-Path "$pythonFolderPath\python.exe")) {
     Write-Host "Python executable does not exist in folder: $pythonFolderPath"
     exit 1
 }
+
+
+
 Write-Host "Windows tool installer"
 
 # Read GitHub token from file
@@ -70,7 +70,3 @@ Set-Content -Path "$spmFolderPath\spm.bat" -Value $batContent
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
 
-# Process the remaining provided arguments
-foreach ($eacharg in $remainingArgs) {
-    Write-Host "Processing argument: $eacharg"
-}

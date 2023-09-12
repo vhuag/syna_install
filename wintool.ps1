@@ -69,4 +69,6 @@ Set-Content -Path "$spmFolderPath\spm.bat" -Value $batContent
 
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
+Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pyserial"
+Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pynput"
 

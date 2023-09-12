@@ -4,7 +4,7 @@ param(
     [string]$pythonFolderPath,
 
     [Parameter(Position=1, ValueFromRemainingArguments = $true)]
-    [string[]]$args
+    [string[]]$remainingArgs
 )
 # check if pythonFolderPath exists and python.exe in this folder
 if (-Not (Test-Path $pythonFolderPath)) {
@@ -71,6 +71,6 @@ Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
 
 # Process the remaining provided arguments
-foreach ($arg in $args) {
+foreach ($arg in $remainingArgs) {
     Write-Host "Processing argument: $arg"
 }

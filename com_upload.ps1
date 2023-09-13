@@ -95,10 +95,27 @@ $batContent = @"
 "@
 Set-Content -Path "$spmFolderPath\spm.bat" -Value $batContent
 
-Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install requests"
-Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
-Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pyserial"
-Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pynput"
+# List of modules to check
+$modules = @("requests", "pymongo", "pyserial", "pynput")
+
+# Get the list of installed modules
+$moduleList = Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip list"
+
+foreach ($module in $modules) {
+    $moduleFound = $false
+
+    foreach ($line in $moduleList) {
+        if ($line -match $module) {
+            $moduleFound = $true
+            break
+        }
+    }
+
+    if (-Not $moduleFound) {
+        Write-Host "Installing Python module: $module"
+        Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install $module"
+    }
+}
 
 # Initialize a variable to store the command-line parameters
 $spmParameters = ""

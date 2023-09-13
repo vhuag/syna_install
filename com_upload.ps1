@@ -118,4 +118,5 @@ foreach ($entry in $synaluDict.GetEnumerator()) {
 # Run spm with the collected command-line parameters
 $spmCommand = "$pythonFolderPath\python.exe C:\spm\spm run log_uploader upload_from_com $spmParameters"
 Write-Host "Running: $spmCommand"
-#Invoke-Expression "& $spmCommand"
+Invoke-Expression "& $spmCommand"
+#Start-Process -FilePath "$pythonFolderPath\python.exe" -ArgumentList "C:\spm\spm $spmParameters" -NoNewWindow -Wait

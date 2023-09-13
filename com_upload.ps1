@@ -100,9 +100,22 @@ Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pymongo"
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pyserial"
 Invoke-Expression "& '$pythonFolderPath\python.exe' -m pip install pynput"
 
+# Initialize a variable to store the command-line parameters
+$spmParameters = ""
 
+# Convert each key-value pair in the dictionary to a command-line parameter
+# Convert each key-value pair in the dictionary to a command-line parameter
+foreach ($entry in $synaluDict.GetEnumerator()) {
+    $key = $entry.Name
+    $value = $entry.Value
+    # Skip pythonFolderPath
+    if ($key -eq "pythonPath") {
+        continue
+    }
+    $spmParameters += "$key=$value "
+}
 
 # Run spm with the collected command-line parameters
 $spmCommand = "$pythonFolderPath\python.exe C:\spm\spm run log_uploader upload_from_com $spmParameters"
 Write-Host "Running: $spmCommand"
-Invoke-Expression "& $spmCommand"
+#Invoke-Expression "& $spmCommand"
